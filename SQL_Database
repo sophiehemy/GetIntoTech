@@ -1,0 +1,77 @@
+create table MEMBER(
+    MemberID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    MemberStatus ENUM('Gold','Silver','Bronze') NOT NULL DEFAULT 'Bronze',
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    AddressLine TINYTEXT NOT NULL,
+    Town VARCHAR(50) NOT NULL, 
+    Postcode VARCHAR(8) NOT NULL,
+    PhoneNumber VARCHAR(20) NOT NULL,
+    EmailAddress VARCHAR(100) NOT NULL, 
+    Password VARCHAR(128) NOT NULL
+    );
+
+
+create table GAME_REVIEW(
+    ID INT UNSIGNED NOT NULL PRIMARY KEY,
+    Rating TINYINT UNSIGNED,
+    Review VARCHAR(255),
+    MemberID INT UNSIGNED NOT NULL,
+    foreign key(MemberID) references MEMBER(MemberID)
+);
+
+create table GAME_CATEGORY(
+    CategoryID TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+    CategoryName TINYINT 
+    );
+
+
+create table BOARD_GAMES(
+    GameID INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ThumbnailLink TEXT NOT NULL,
+    Title TEXT NOT NULL,
+    Min_num_of_players TINYINT(2) UNSIGNED NOT NULL, 
+    Max_num_of_players TINYINT(2) UNSIGNED NOT NULL,
+    Best_num_of_players TINYINT(2) UNSIGNED NOT NULL, 
+    MinAge TINYINT(3) UNSIGNED NOT NULL, 
+    PlayTime SMALLINT(5) UNSIGNED NOT NULL, 
+    GameMechanics VARCHAR(255) NOT NULL, 
+    PlayLanguage VARCHAR(255) NOT NULL, 
+    Designer VARCHAR(255) NOT NULL, 
+    Artist VARCHAR(255) NOT NULL, 
+    Publisher VARCHAR(255) NOT NULL,
+    YearMade YEAR NOT NULL, 
+    Rating FLOAT(3,2) UNSIGNED NOT NULL,
+    Num_of_users_rated INT(11) UNSIGNED NOT NULL, 
+    DifficultyRating ENUM('Beginner','Intermediate','Expert') NOT NULL,
+    Quality ENUM("New", "Used - like new", "Used - very good", "Used - good", "Used - Acceptable", "Used - Missing pieces") DEFAULT 'New' NOT NULL,
+    NoLongerPlayable ENUM('Y','N') DEFAULT 'Y' NOT NULL,
+    Available ENUM('Y','N') NOT NULL,
+    CategoryID TINYINT(3) UNSIGNED NOT NULL 
+    );
+
+create table GAME_CATEGORY_LINK(
+    Category_to_game_ID TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    GameID INT UNSIGNED NOT NULL,
+    CategoryID TINYTEXT UNSIGNED NOT NULL,
+    foreign key(CategoryID) references GAME_CATEGORY(CategoryID),
+    foreign key(GameID) references BOARD_GAMES(GameID)
+    );
+
+create table BORROW_HISTORY(
+    RecordID INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    BorrowedDate DATE NOT NULL,
+    ReturnDate DATE NOT NULL,
+    GameID INT UNSIGNED NOT NULL,
+    MemberID INT UNSIGNED NOT NULL,
+    foreign key(GameID) references BOARD_GAMES(GameID),
+    foreign key(MemberID) references MEMBER(MemberID)
+    );
+
+create table LIBRARY(
+    LibraryID TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL, 
+    Address VARCHAR(255) NOT NULL, 
+    PhoneNumber VARCHAR(20) NOT NULL,
+    EmailAddress VARCHAR(100) NOT NULL
+    );
